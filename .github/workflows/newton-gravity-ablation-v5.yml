@@ -1,0 +1,22 @@
+name: F139 Newton Gravity Ablation V5
+on:
+  workflow_dispatch:
+  push:
+    paths: ['runtime/nvidia_newton_gravity_ablation_v5.py','.github/workflows/newton-gravity-ablation-v5.yml']
+permissions:
+  contents: read
+jobs:
+  ablation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install --disable-pip-version-check newton
+      - run: python runtime/nvidia_newton_gravity_ablation_v5.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f139-newton-gravity-ablation-v5
+          path: artifacts/f139_newton_gravity_ablation_v5.json
