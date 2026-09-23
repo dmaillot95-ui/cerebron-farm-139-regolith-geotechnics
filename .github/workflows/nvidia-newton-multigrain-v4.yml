@@ -1,0 +1,22 @@
+name: F139 NVIDIA Newton Multigrain V4
+on:
+  workflow_dispatch:
+  push:
+    paths: ['runtime/nvidia_newton_multigrain_v4.py','.github/workflows/nvidia-newton-multigrain-v4.yml']
+permissions:
+  contents: read
+jobs:
+  grains:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install --disable-pip-version-check newton
+      - run: python runtime/nvidia_newton_multigrain_v4.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f139-nvidia-newton-multigrain-v4
+          path: artifacts/f139_newton_multigrain_v4.json
