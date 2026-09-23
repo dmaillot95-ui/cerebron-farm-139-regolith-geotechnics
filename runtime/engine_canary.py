@@ -1,0 +1,4 @@
+import json,hashlib,pathlib,platform
+import math
+mass=1200.;g=1.62;feet=4;area_each=.12;load=mass*g;pressure=load/(feet*area_each);fos=2.;required=pressure*fos;out={"mass_kg":mass,"gravity_m_s2":g,"total_load_n":load,"foot_area_total_m2":feet*area_each,"bearing_pressure_pa":pressure,"required_allowable_pa_fos2":required};ok=pressure>0 and required>pressure
+out.update({"farm":139,"engine":"python-engineering-batch-canary","engine_version":platform.python_version(),"test":"BEARING_PRESSURE","status":"REAL_ENGINE_CANARY_OK" if ok else "FAIL","epistemic_status":"ENGINEERING_CANARY_NOT_PHYSICAL_VALIDATION"});raw=json.dumps(out,sort_keys=True).encode();out["result_sha256"]=hashlib.sha256(raw).hexdigest();pathlib.Path("artifacts").mkdir(exist_ok=True);pathlib.Path("artifacts/f139_engine_canary.json").write_text(json.dumps(out,indent=2)+"\n");print(json.dumps(out));raise SystemExit(0 if ok else 1)
