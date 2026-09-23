@@ -1,0 +1,27 @@
+name: F139 Newton Free Granular Collapse V6
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'runtime/nvidia_newton_free_collapse_v6.py'
+      - '.github/workflows/newton-free-collapse-v6.yml'
+permissions:
+  contents: read
+jobs:
+  collapse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Newton
+        run: python -m pip install --disable-pip-version-check newton==1.6.0
+      - name: Execute free granular collapse
+        run: python runtime/nvidia_newton_free_collapse_v6.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f139-newton-free-collapse-v6
+          path: artifacts/f139_newton_free_collapse_v6.json
