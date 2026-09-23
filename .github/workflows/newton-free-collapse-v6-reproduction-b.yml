@@ -1,0 +1,27 @@
+name: F139 Newton Free Collapse V6 Reproduction B
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'runtime/nvidia_newton_free_collapse_v6_reproduction_b.py'
+      - '.github/workflows/newton-free-collapse-v6-reproduction-b.yml'
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Newton
+        run: python -m pip install --disable-pip-version-check newton==1.6.0
+      - name: Reproduce V6 with separate implementation
+        run: python runtime/nvidia_newton_free_collapse_v6_reproduction_b.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f139-newton-free-collapse-v6-reproduction-b
+          path: artifacts/f139_newton_free_collapse_v6_reproduction_b.json
