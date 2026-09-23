@@ -1,0 +1,20 @@
+name: CEREBRON F139 Real Engine Canary
+on:
+  workflow_dispatch:
+  push:
+    paths: ['runtime/engine_canary.py','.github/workflows/real-engine-canary.yml']
+permissions:
+  contents: read
+jobs:
+  real-engine-canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python runtime/engine_canary.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: f139-real-engine-canary
+          path: artifacts/f139_engine_canary.json
+          retention-days: 14
