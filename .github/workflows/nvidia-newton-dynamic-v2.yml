@@ -1,0 +1,22 @@
+name: F139 NVIDIA Newton Dynamic V2
+on:
+  workflow_dispatch:
+  push:
+    paths: ['runtime/nvidia_newton_dynamic_v2.py','.github/workflows/nvidia-newton-dynamic-v2.yml']
+permissions:
+  contents: read
+jobs:
+  dynamic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check newton
+      - run: python runtime/nvidia_newton_dynamic_v2.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: f139-nvidia-newton-dynamic-v2
+          path: artifacts/f139_newton_dynamic_v2.json
