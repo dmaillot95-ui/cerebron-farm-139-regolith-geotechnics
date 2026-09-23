@@ -1,0 +1,28 @@
+name: CEREBRON F139 Canary
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  contract-canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate CEREBRON contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f README.md
+          grep -q "CÉRÉBRON" README.md
+          grep -q "CLAIM <= EVIDENCE" README.md
+          grep -q "MINIMAL_USEFUL_COALITION" README.md
+          grep -q "COLD_BENCHMARK" README.md
+          mkdir -p artifacts
+          printf '{"farm":139,"status":"CONTRACT_CANARY_OK","epistemic_status":"WORKFLOW_ONLY_NOT_ENGINE_EXECUTION","maturity_ceiling":"S3"}\n' > artifacts/canary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: f139-contract-canary
+          path: artifacts/canary.json
+          retention-days: 7
